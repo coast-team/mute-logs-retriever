@@ -1,0 +1,24 @@
+{
+  "name": "mute-logs-retriever",
+  "version": "1.0.0",
+  "description": "gather muteLogs from mongodb",
+  "author": "Cédric Enclos",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc --outDir dist/",
+    "start": "node dist/app.js"
+  },
+  "preferGlobal": true,
+  "dependencies": {
+    "mongodb": "^3.1.6"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.7",
+    "@types/node": "^8.5.7",
+    "prettier": "^1.14.2",
+    "rxjs": "^6.0.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "~2.4.2"
+  }
+}
