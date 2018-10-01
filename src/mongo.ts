@@ -15,17 +15,17 @@ export class Mongo {
     this.connectionSubject = new Subject()
   }
 
-  start(): void {
+  start(database: string = 'muteLogs'): void {
     MongoClient.connect(
       this.url,
       { useNewUrlParser: true },
       (err, client) => {
         if (err) {
           console.log('[MONGO] Error: Cannot connect to mongodb')
-          // setTimeout(this.start, 1000)
+          console.log(err)
         }
         this.client = client
-        this.db = client.db('muteLogs')
+        this.db = client.db(database)
         this.connected = true
         console.log('[MONGO] Connected to "muteLogs" database')
         this.connectionSubject.next()
@@ -42,7 +42,7 @@ export class Mongo {
     if (!this.isConnected) {
       throw new Error('[MONGO] ERROR : the database is not connected yet')
     }
-    console.log('[MONGO] Get All ', collection)
+    console.log('[MONGO] Get All', collection)
     return this.db
       .collection(collection)
       .find()

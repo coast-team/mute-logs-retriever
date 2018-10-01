@@ -1,0 +1,201 @@
+[
+  {
+    "type": "localInsertion",
+    "siteId": -1767873492,
+    "clock": 0,
+    "position": 0,
+    "content": "S",
+    "length": 1,
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 0 }] },
+      "content": "S"
+    },
+    "context": {},
+    "timestamp": 1538398156996,
+    "collaborators": [4257847336],
+    "neighbours": { "downstream": [], "upstream": [] }
+  },
+  {
+    "type": "localInsertion",
+    "siteId": -1767873492,
+    "clock": 1,
+    "position": 1,
+    "content": "a",
+    "length": 1,
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 1 }] },
+      "content": "a"
+    },
+    "context": { "-1767873492": 0 },
+    "timestamp": 1538398157637,
+    "collaborators": [4257847336],
+    "neighbours": { "downstream": [], "upstream": [] }
+  },
+  {
+    "type": "localInsertion",
+    "siteId": -1767873492,
+    "clock": 3,
+    "position": 3,
+    "content": "l",
+    "length": 1,
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 3 }] },
+      "content": "l"
+    },
+    "context": { "-1767873492": 2 },
+    "timestamp": 1538398162597,
+    "collaborators": [4257847336],
+    "neighbours": { "downstream": [], "upstream": [] }
+  },
+  {
+    "type": "remoteDeletion",
+    "siteId": -1767873492,
+    "remoteSiteId": -677194285,
+    "remoteClock": 0,
+    "textOperation": [{ "position": 3, "length": 1 }],
+    "logootsOperation": {
+      "lid": [{ "idBegin": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 3 }] }, "end": 3 }]
+    },
+    "context": { "-1767873492": 3, "-677194285": 0 },
+    "timestamp": 1538398178921,
+    "collaborators": [4257847336, 4123530279],
+    "neighbours": { "downstream": [4123530279], "upstream": [4123530279] }
+  },
+  {
+    "type": "remoteInsertion",
+    "siteId": -1767873492,
+    "remoteSiteId": -677194285,
+    "remoteClock": 1,
+    "textOperation": [{ "position": 3, "content": "u", "length": 1 }],
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 2123756800, "replicaNumber": -677194285, "clock": 0, "offset": 0 }] },
+      "content": "u"
+    },
+    "context": { "-1767873492": 3, "-677194285": 1 },
+    "timestamp": 1538398180819,
+    "collaborators": [4257847336, 4123530279],
+    "neighbours": { "downstream": [4123530279], "upstream": [4123530279] }
+  },
+  {
+    "type": "remoteInsertion",
+    "siteId": -677194285,
+    "remoteSiteId": -1767873492,
+    "remoteClock": 0,
+    "textOperation": [{ "position": 0, "content": "S", "length": 1 }],
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 0 }] },
+      "content": "S"
+    },
+    "context": { "-1767873492": 3 },
+    "timestamp": 1538398173991,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  {
+    "type": "remoteInsertion",
+    "siteId": -677194285,
+    "remoteSiteId": -1767873492,
+    "remoteClock": 1,
+    "textOperation": [{ "position": 1, "content": "a", "length": 1 }],
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 1 }] },
+      "content": "a"
+    },
+    "context": { "-1767873492": 3 },
+    "timestamp": 1538398173993,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  {
+    "type": "remoteInsertion",
+    "siteId": -677194285,
+    "remoteSiteId": -1767873492,
+    "remoteClock": 3,
+    "textOperation": [{ "position": 3, "content": "l", "length": 1 }],
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 3 }] },
+      "content": "l"
+    },
+    "context": { "-1767873492": 3 },
+    "timestamp": 1538398173994,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  {
+    "type": "remoteInsertion",
+    "siteId": -677194285,
+    "remoteSiteId": -1767873492,
+    "remoteClock": 2,
+    "textOperation": [{ "position": 2, "content": "l", "length": 1 }],
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 2 }] },
+      "content": "l"
+    },
+    "context": { "-1767873492": 3 },
+    "timestamp": 1538398173994,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  {
+    "type": "localDeletion",
+    "siteId": -677194285,
+    "clock": 0,
+    "position": 3,
+    "length": 1,
+    "logootsOperation": {
+      "lid": [{ "idBegin": { "tuples": [{ "random": 1948715057, "replicaNumber": -1767873492, "clock": 0, "offset": 3 }] }, "end": 3 }]
+    },
+    "context": { "-1767873492": 3 },
+    "timestamp": 1538398178904,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  {
+    "type": "localInsertion",
+    "siteId": -677194285,
+    "clock": 1,
+    "position": 3,
+    "content": "u",
+    "length": 1,
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 2123756800, "replicaNumber": -677194285, "clock": 0, "offset": 0 }] },
+      "content": "u"
+    },
+    "context": { "-1767873492": 3, "-677194285": 0 },
+    "timestamp": 1538398180808,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  {
+    "type": "remoteInsertion",
+    "siteId": -1767873492,
+    "remoteSiteId": -677194285,
+    "remoteClock": 2,
+    "textOperation": [{ "position": 4, "content": "t", "length": 1 }],
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 2123756800, "replicaNumber": -677194285, "clock": 0, "offset": 1 }] },
+      "content": "t"
+    },
+    "context": { "-1767873492": 3, "-677194285": 2 },
+    "timestamp": 1538398181586,
+    "collaborators": [4257847336, 4123530279],
+    "neighbours": { "downstream": [4123530279], "upstream": [4123530279] }
+  },
+  {
+    "type": "localInsertion",
+    "siteId": -677194285,
+    "clock": 2,
+    "position": 4,
+    "content": "t",
+    "length": 1,
+    "logootsOperation": {
+      "id": { "tuples": [{ "random": 2123756800, "replicaNumber": -677194285, "clock": 0, "offset": 1 }] },
+      "content": "t"
+    },
+    "context": { "-1767873492": 3, "-677194285": 1 },
+    "timestamp": 1538398181574,
+    "collaborators": [4123530279, 4257847336],
+    "neighbours": { "downstream": [4257847336], "upstream": [4257847336] }
+  },
+  { "type": "finalState", "state": { "-1767873492": 3, "-677194285": 2 } }
+]
