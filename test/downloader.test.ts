@@ -18,35 +18,35 @@ test.beforeEach((context) => {
 test('Good file', async (context) => {
   const logs = await load('test/doc1.json')
   logs.push(context.context['downloader'].findFinalState(logs))
-  const healthManager = new HealthCheckManager(logs)
+  const healthManager = new HealthCheckManager(logs, false)
   const result = healthManager.healthCheck()
 
-  context.deepEqual(result.error, [])
+  context.deepEqual(result.missing, [])
 })
 
 test('1 local is missing - first', async (context) => {
   const logs = await load('test/doc2-1.json')
   logs.push(context.context['downloader'].findFinalState(logs))
-  const healthManager = new HealthCheckManager(logs)
+  const healthManager = new HealthCheckManager(logs, false)
   const result = healthManager.healthCheck()
 
-  context.deepEqual(result.error, [{ site: -1767873492, clock: 0 }])
+  context.deepEqual(result.missing, [{ site: -1767873492, clock: 0 }])
 })
 
 test('1 local is missing - middle', async (context) => {
   const logs = await load('test/doc2-2.json')
   logs.push(context.context['downloader'].findFinalState(logs))
-  const healthManager = new HealthCheckManager(logs)
+  const healthManager = new HealthCheckManager(logs, false)
   const result = healthManager.healthCheck()
 
-  context.deepEqual(result.error, [{ site: -1767873492, clock: 2 }])
+  context.deepEqual(result.missing, [{ site: -1767873492, clock: 2 }])
 })
 
 test('1 local is missing - last', async (context) => {
   const logs = await load('test/doc2-3.json')
   logs.push(context.context['downloader'].findFinalState(logs))
-  const healthManager = new HealthCheckManager(logs)
+  const healthManager = new HealthCheckManager(logs, false)
   const result = healthManager.healthCheck()
 
-  context.deepEqual(result.error, [{ site: -1767873492, clock: 3 }])
+  context.deepEqual(result.missing, [{ site: -1767873492, clock: 3 }])
 })

@@ -1,20 +1,26 @@
+import { LogManager } from './LogManager'
+
 export interface HealthCheckResult {
-  error: object[]
-  duplicas: object[]
+  missing: object[]
+  duplica: object[]
   healthy: number
 }
 
 export class HealthCheckManager {
   private logs: object[]
+  private debug: boolean
+  private healthCheckFilePath: string
 
-  constructor(logs: object[]) {
+  constructor(logs: object[], debug: boolean = true, filePath: string = './healthCheck.txt') {
     this.logs = logs
+    this.debug = debug
+    this.healthCheckFilePath = filePath
   }
 
   public healthCheck(): HealthCheckResult {
     const logCopy: object[] = JSON.parse(JSON.stringify(this.logs))
     const finalState = logCopy.pop()['state']
-    const result = { error: [], duplicas: [], healthy: 0 }
+    const result = { missing: [], duplica: [], healthy: 0 }
     const map = new Map<number, object[]>()
 
     logCopy
@@ -41,28 +47,60 @@ export class HealthCheckManager {
             present.add(clock)
             result.healthy++
           } else {
-            result.duplicas.push({ site, clock })
+            result.duplica.push({ site, clock })
           }
         }
 
         // We check if some operations are missing
         const missings = new Set(Array.from(expectedSet).filter((x) => !present.has(x)))
         missings.forEach((clock) => {
-          result.error.push({ site, clock })
+          result.missing.push({ site, clock })
         })
       } else {
-        console.log('[MLR] HealthCheck : Le site ' + site + ' est inconnu')
+        if (this.debug) LogManager.log('HealthCheck : The site ' + site + ' is unknown')
       }
     })
 
-    const nbMissing = result.error.length
-    const nbDuplicas = result.duplicas.length
-    console.log('[MLR] HealthCheck : ')
-    console.log('\t' + nbMissing + ' opération(s) est(sont) manquante(s)')
-    console.log('\t' + nbDuplicas + " opération(s) est(sont) des duplicata d'opérations existantes")
-    console.log('\t' + result.healthy + ' opération(s) locale(s) en pleine forme')
-    //this.log(JSON.stringify(result))
+    if (this.debug) {
+      const nbMissing = result.missing.length
+      const nbDuplicas = result.duplica.length
+      const msg =
+        'HealthCheck : \n' +
+        '\t' +
+        nbMissing +
+        ' local operations are missing.\n' +
+        '\t' +
+        nbDuplicas +
+        ' local operations are duplicate from existing operation\n' +
+        '\t' +
+        result.healthy +
+        ' local operations are in a good health'
+      LogManager.log(msg)
+      LogManager.write(this.healthCheckFilePath, msg)
+      LogManager.write(this.healthCheckFilePath, this.resultToString(result))
+    }
 
     return result
+  }
+
+  public resultToString(result: HealthCheckResult): string {
+    let res = 'Results :\n'
+    res += '\tMissing operation - \n'
+    res += result.missing
+      .map((v) => {
+        return JSON.stringify(v) + '\n'
+      })
+      .reduce((acc, v) => {
+        return acc + v
+      }, '')
+    res += '\tDuplicate operation - \n'
+    res += result.duplica
+      .map((v) => {
+        return JSON.stringify(v) + '\n'
+      })
+      .reduce((acc, v) => {
+        return acc + v
+      }, '')
+    return res
   }
 }

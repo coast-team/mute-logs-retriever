@@ -1,6 +1,7 @@
 import { writeFile } from 'fs'
 import { Mongo } from './mongo'
 import { HealthCheckManager } from './HealthCheckManager'
+import { LogManager } from './LogManager'
 
 export class Downloader {
   private mongoURL: string
@@ -51,7 +52,7 @@ export class Downloader {
           this.output = opt.shift()
           break
         default:
-          console.log('[MLR] Error download : this option, ' + o + ', does not exist')
+          LogManager.error('download : this option, ' + o + ', does not exist')
           this.usage()
           break
       }
@@ -79,10 +80,29 @@ export class Downloader {
 
   public async downloadCollection(): Promise<void> {
     const logs = await this.mongo.getAll(this.collection)
+    const now = new Date()
+    const time =
+      now.getDate() +
+      '-' +
+      (now.getMonth() + 1) +
+      '-' +
+      now.getFullYear() +
+      '-' +
+      now.getHours() +
+      '-' +
+      now.getMinutes() +
+      '-' +
+      now.getSeconds()
 
+    if (this.debug) {
+      LogManager.log('Final state calculation...')
+    }
     logs.push(this.findFinalState(logs))
 
-    const healthManager = new HealthCheckManager(logs)
+    const healthManager = new HealthCheckManager(logs, true, this.output + '/healthCheck_' + this.collection + '_' + time + '.txt')
+    if (this.debug) {
+      LogManager.log('HealthCheck in progress...')
+    }
     healthManager.healthCheck()
 
     let logString = logs
@@ -94,38 +114,19 @@ export class Downloader {
         return a + b
       }, '')
     logString = '[' + logString.slice(0, logString.length - 2) + ']'
-    const now = new Date()
-    const fileName =
-      'mutelogs_' +
-      this.collection +
-      '_' +
-      now.getDate() +
-      '-' +
-      (now.getMonth() + 1) +
-      '-' +
-      now.getFullYear() +
-      '-' +
-      now.getHours() +
-      '-' +
-      now.getMinutes() +
-      '-' +
-      now.getSeconds() +
-      '.json'
+    const fileName = 'mutelogs_' + this.collection + '_' + time + '.json'
     writeFile(this.output + fileName, logString, 'utf8', (err) => {
       if (err) {
         throw err
       }
     })
     if (this.debug) {
-      console.log('[MLR] Download successful in ' + this.output + ' !')
+      LogManager.log('Download successful in ' + this.output + ' !')
     }
   }
 
   public findFinalState(logs: object[]): object {
     const state = {}
-    if (this.debug) {
-      console.log("[MLR] Calcul de l'etat final")
-    }
     logs.forEach((l) => {
       const context = l['context'] as Array<number>
       const local = l['type'] === 'localInsertion' || l['type'] === 'localDeletion'
@@ -146,7 +147,7 @@ export class Downloader {
       }
     })
     if (this.debug) {
-      console.log('[MLR] Calcul terminé')
+      LogManager.log('Calculation done')
     }
     return { type: 'finalState', state }
   }
@@ -163,8 +164,4 @@ export class Downloader {
   public stop() {
     this.mongo.stop()
   }
-
-  /*log(msg: string) {
-    writeFile('./log.txt', msg, (err) => {})
-  }*/
 }
