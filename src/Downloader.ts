@@ -1,6 +1,12 @@
 import { writeFile } from 'fs'
 import { Mongo } from './mongo'
 
+export interface HealthCheckResult {
+  error: object[]
+  duplicas: object[]
+  healthy: number
+}
+
 export class Downloader {
   private mongoURL: string
   private database: string
@@ -78,8 +84,10 @@ export class Downloader {
 
   public async downloadCollection(): Promise<void> {
     const logs = await this.mongo.getAll(this.collection)
+
     logs.push(this.findFinalState(logs))
     this.healthCheck(logs)
+
     let logString = logs
       .map((e) => {
         delete e._id
@@ -146,11 +154,11 @@ export class Downloader {
     return { type: 'finalState', state }
   }
 
-  public healthCheck(logs: object[]): object[] {
+  public healthCheck(logs: object[]): HealthCheckResult {
     const logCopy: object[] = JSON.parse(JSON.stringify(logs))
     const finalState = logCopy.pop()['state']
-    const result = []
-    const map = new Map<string, object[]>()
+    const result = { error: [], duplicas: [], healthy: 0 }
+    const map = new Map<number, object[]>()
 
     logCopy
       .filter((log) => {
@@ -166,16 +174,25 @@ export class Downloader {
       })
     map.forEach((siteLog, site) => {
       if (typeof finalState[site] !== 'undefined') {
-        siteLog.sort((a, b) => {
-          return a['clock'] - b['clock']
-        })
-        let error = 0
-        for (let expected = 0; expected <= finalState[site]; expected++) {
-          if (typeof siteLog[expected - error] === 'undefined' || siteLog[expected - error]['clock'] !== expected) {
-            result.push({ site, clock: expected })
-            error++
+        const target = finalState[site]
+        const present = new Set()
+        const expectedSet = new Set(Array.from(Array(target + 1).keys()))
+
+        for (let i = 0; i < siteLog.length; i++) {
+          const clock = siteLog[i]['clock']
+          if (!present.has(clock)) {
+            present.add(clock)
+            result.healthy++
+          } else {
+            result.duplicas.push({ site, clock })
           }
         }
+
+        // We check if some operations are missing
+        const missings = new Set(Array.from(expectedSet).filter((x) => !present.has(x)))
+        missings.forEach((clock) => {
+          result.error.push({ site, clock })
+        })
       } else {
         if (this.debug) {
           console.log('[MLR] HealthCheck : Le site ' + site + ' est inconnu')
@@ -184,12 +201,13 @@ export class Downloader {
     })
 
     if (this.debug) {
-      if (result.length === 0) {
-        console.log('[MLR] HealthCheck : Les logs sont en pleine forme !')
-      } else {
-        console.log('[MLR] HealthCheck : ' + result.length + ' opération(s) est(sont) manquante(s)')
-        console.log('\t', result)
-      }
+      const nbMissing = result.error.length
+      const nbDuplicas = result.duplicas.length
+      console.log('[MLR] HealthCheck : ')
+      console.log('\t' + nbMissing + ' opération(s) est(sont) manquante(s)')
+      console.log('\t' + nbDuplicas + " opération(s) est(sont) des duplicata d'opérations existantes")
+      console.log('\t' + result.healthy + ' opération(s) locale(s) en pleine forme')
+      this.log(JSON.stringify(result))
     }
 
     return result
@@ -206,5 +224,9 @@ export class Downloader {
 
   public stop() {
     this.mongo.stop()
+  }
+
+  log(msg: string) {
+    writeFile('./log.txt', msg, (err) => {})
   }
 }
