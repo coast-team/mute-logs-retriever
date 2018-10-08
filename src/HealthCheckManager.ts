@@ -64,6 +64,12 @@ export class HealthCheckManager {
     if (this.debug) {
       const nbMissing = result.missing.length
       const nbDuplicas = result.duplica.length
+      const ok = 'Log State : ' + (nbMissing > 0 ? 'ERROR' : 'OK')
+      const stats = 'Statistiques :\n\t' + map.size + ' differents sites.\n\t' + (nbMissing + result.healthy) + ' local operations.'
+      let finalStateVector = 'Site id : Clock\n'
+      for (let site in finalState) {
+        finalStateVector += '\t' + site + ' : ' + finalState[site] + '\n'
+      }
       const msg =
         'HealthCheck : \n' +
         '\t' +
@@ -76,11 +82,18 @@ export class HealthCheckManager {
         result.healthy +
         ' local operations are in a good health'
       LogManager.log(msg)
+      LogManager.write(this.healthCheckFilePath, ok)
+      LogManager.write(this.healthCheckFilePath, stats)
+      LogManager.write(this.healthCheckFilePath, finalStateVector)
       LogManager.write(this.healthCheckFilePath, msg)
       LogManager.write(this.healthCheckFilePath, this.resultToString(result))
     }
 
     return result
+  }
+
+  public removeDuplicate() {
+    // TODO
   }
 
   public resultToString(result: HealthCheckResult): string {

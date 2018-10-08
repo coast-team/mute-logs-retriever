@@ -39,6 +39,12 @@ The file downloaded will be named : _mutelogs-{collection}-{date}.json_
 The download process will add a finalState log, which is the maximum state we should reach.
 Then an health check is done in order to detect missings operations
 
+## HealthCheck
+
+Before writing the log file, an health check is done.
+A file is generated with the number of missing local operations, the number of duplicate local operations and the number of healthy local operations (operations with no problems).
+After that you can find the result, with the list of missing and duplicate operations.
+
 ## Possible feature
 
 - we could write a file during the healthCheck with some statistic on the logs. (Number of site, maximum collaborator at the same time, number of localOperation, etc...)
