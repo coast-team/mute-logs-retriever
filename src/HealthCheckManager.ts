@@ -65,7 +65,14 @@ export class HealthCheckManager {
       const nbMissing = result.missing.length
       const nbDuplicas = result.duplica.length
       const ok = 'Log State : ' + (nbMissing > 0 ? 'ERROR' : 'OK')
-      const stats = 'Statistiques :\n\t' + map.size + ' differents sites.\n\t' + (nbMissing + result.healthy) + ' local operations.'
+      const stats =
+        'Statistiques :\n\t' +
+        map.size +
+        ' differents sites.\n\t' +
+        this.logs.length +
+        ' operations logged\n\t' +
+        (nbMissing + result.healthy) +
+        ' local operations.'
       let finalStateVector = 'Site id : Clock\n'
       for (let site in finalState) {
         finalStateVector += '\t' + site + ' : ' + finalState[site] + '\n'
@@ -92,8 +99,35 @@ export class HealthCheckManager {
     return result
   }
 
-  public removeDuplicate() {
-    // TODO
+  public removeDuplicate(logs: object[], duplicateOperation: object[], isThereDuplicas: boolean = true): object[] {
+    if (this.debug) LogManager.log('Remove duplicas...')
+    if (isThereDuplicas) {
+      const logsWithoutDuplicas = []
+      logs.forEach((log) => {
+        if (log['type'] === 'localInsertion' || log['type'] === 'localDeletion') {
+          const site = log['siteId']
+          const clock = log['clock']
+          let duplica = false
+          for (let i = 0; i < duplicateOperation.length; i++) {
+            if (duplicateOperation[i]['site'] === site && duplicateOperation[i]['clock'] === clock) {
+              duplicateOperation.splice(i, 1)
+              duplica = true
+              break
+            }
+          }
+          if (!duplica) {
+            logsWithoutDuplicas.push(log)
+          }
+        } else {
+          logsWithoutDuplicas.push(log)
+        }
+      })
+
+      if (this.debug) LogManager.log('Operation done : ' + logsWithoutDuplicas.length + '/' + logs.length + ' operations kept')
+      return logsWithoutDuplicas
+    } else {
+      return logs
+    }
   }
 
   public resultToString(result: HealthCheckResult): string {

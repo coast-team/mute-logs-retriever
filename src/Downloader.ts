@@ -103,11 +103,12 @@ export class Downloader {
     if (this.debug) {
       LogManager.log('HealthCheck in progress...')
     }
-    healthManager.healthCheck()
+    const result = healthManager.healthCheck()
 
-    let logString = logs
+    let logString = healthManager
+      .removeDuplicate(logs, result.duplica, result.duplica.length !== 0)
       .map((e) => {
-        delete e._id
+        delete e['_id']
         return JSON.stringify(e) + ',\n'
       })
       .reduce((a, b) => {
