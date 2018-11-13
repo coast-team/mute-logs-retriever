@@ -1,4 +1,5 @@
 import { Downloader } from './Downloader'
+import { LogStats } from './Stats'
 
 class App {
   constructor() {
@@ -15,6 +16,9 @@ class App {
       switch (opt) {
         case 'download':
           this.download(options)
+          break
+        case 'stats':
+          this.stats(options)
           break
         case 'hello':
           this.hello()
@@ -45,6 +49,14 @@ class App {
       download.downloadCollection().then(() => {
         download.stop()
       })
+    })
+  }
+
+  private stats(optLeft: string[]) {
+    const stats = new LogStats(optLeft)
+    stats.loadFile().then(() => {
+      stats.computeStats()
+      console.log('Fin')
     })
   }
 
