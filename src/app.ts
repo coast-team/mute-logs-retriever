@@ -1,5 +1,6 @@
 import { Downloader } from './Downloader'
 import { LogStats } from './Stats'
+import { LogManager } from './LogManager';
 
 class App {
   constructor() {
@@ -57,11 +58,14 @@ class App {
     stats.loadFile().then(() => {
       stats.computeStats()
       console.log('Fin')
+    }).catch(err=>{
+      LogManager.error(err)
+      console.log(err)
     })
   }
 
   private hello(): void {
-    console.log('[MLR] Hello World !')
+    LogManager.log('Hello World !')
   }
 }
 
