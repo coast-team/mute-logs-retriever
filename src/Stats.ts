@@ -1,19 +1,19 @@
 import { readFile } from 'fs'
 import { LogootSRopes, LogootSAdd, LogootSDel, Stats } from 'mute-structs'
-import { LogManager } from './LogManager';
+import { LogManager } from './LogManager'
 
 export class LogStats {
   private file: string
   private logs: object[]
   private finalState: Map<number, number>
 
-  constructor (options: string[]) {
-    this.file = ''
+  constructor(options: string[]) {
+    this.file = './muteLogs.json'
 
     this.options(options)
   }
 
-  private options (opt: string[]) {
+  private options(opt: string[]) {
     while (opt.length > 0) {
       const o = opt.shift()
       switch (o) {
@@ -30,14 +30,14 @@ export class LogStats {
     }
   }
 
-  private usage () {
+  private usage() {
     console.log('Usage : ')
     console.log('npm start -- stats -f <filePath>')
     console.log('options : ')
     console.log('\t-f, --file : Define the logs file')
   }
 
-  public loadFile (): Promise<void> {
+  public loadFile(): Promise<void> {
     return new Promise((resolve, reject) => {
       readFile(this.file, (err, data) => {
         if (err) {
@@ -50,7 +50,7 @@ export class LogStats {
     })
   }
 
-  public computeStats () {
+  public computeStats() {
     // Create the final state map
     this.finalState = new Map()
     const tmp = this.logs[this.logs.length - 1]['state']
@@ -63,7 +63,9 @@ export class LogStats {
     // Recreate the document
     const root = new LogootSRopes()
 
-    const remoteOpes = this.logs.filter((log) => { return log["type"] === 'remoteInsertion' || log["type"] === 'remoteDeletion' })
+    const remoteOpes = this.logs.filter((log) => {
+      return log['type'] === 'remoteInsertion' || log['type'] === 'remoteDeletion'
+    })
 
     const map = new Map<Number, Set<number>>()
     const uniqueOpe = []
@@ -79,9 +81,12 @@ export class LogStats {
       }
     })
 
-    const insertions = uniqueOpe.filter((o) => { return o.type === 'remoteInsertion' })
-    const deletions = uniqueOpe.filter((o) => { return o.type === 'remoteDeletion' })
-
+    const insertions = uniqueOpe.filter((o) => {
+      return o.type === 'remoteInsertion'
+    })
+    const deletions = uniqueOpe.filter((o) => {
+      return o.type === 'remoteDeletion'
+    })
 
     let error = false
     insertions.forEach((o) => {

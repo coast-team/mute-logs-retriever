@@ -1,6 +1,6 @@
 import { Downloader } from './Downloader'
 import { LogStats } from './Stats'
-import { LogManager } from './LogManager';
+import { LogManager } from './LogManager'
 
 class App {
   constructor() {
@@ -40,6 +40,7 @@ class App {
     console.log('npm start -- option')
     console.log('option : ')
     console.log('\tdownload - Retrieve data from a mongo database')
+    console.log('\tstats    - Compute statistics on a log file')
     console.log('\thello    - Say hello to the world !')
   }
 
@@ -55,13 +56,16 @@ class App {
 
   private stats(optLeft: string[]) {
     const stats = new LogStats(optLeft)
-    stats.loadFile().then(() => {
-      stats.computeStats()
-      console.log('Fin')
-    }).catch(err=>{
-      LogManager.error(err)
-      console.log(err)
-    })
+    stats
+      .loadFile()
+      .then(() => {
+        stats.computeStats()
+        console.log('Fin')
+      })
+      .catch((err) => {
+        LogManager.error(err)
+        console.log(err)
+      })
   }
 
   private hello(): void {
