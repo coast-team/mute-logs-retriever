@@ -90,19 +90,21 @@ export class LogStats {
 
     let error = false
     insertions.forEach((o) => {
-      const add = LogootSAdd.fromPlain(o.logootsOperation)
+      const ope = o.logootsOperation || o.operation // For compatibility with mute-core logs < 9.0.0
+      const add = LogootSAdd.fromPlain(ope)
       if (add) {
         add.execute(root)
       } else {
-        console.log('add error : ', o.logootsOperation)
+        console.log('add error : ', ope)
       }
     })
     deletions.forEach((o) => {
-      const del = LogootSDel.fromPlain(o.logootsOperation)
+      const ope = o.logootsOperation || o.operation // For compatibility with mute-core logs < 9.0.0
+      const del = LogootSDel.fromPlain(ope)
       if (del) {
         del.execute(root)
       } else {
-        console.log('del error : ', o.logootsOperation)
+        console.log('del error : ', ope)
       }
     })
 

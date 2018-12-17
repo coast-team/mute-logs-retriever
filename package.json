@@ -18,11 +18,11 @@
     "@types/mongodb": "^3.1.7",
     "@types/node": "^8.5.7",
     "ava": "^1.0.0-beta.4",
-    "prettier": "^1.14.2",
-    "rxjs": "^6.0.0",
+    "prettier": "^1.15.3",
+    "rxjs": "^6.3.3",
     "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "typescript": "~2.4.2"
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "~3.2.2"
   },
   "ava": {
     "files": [
