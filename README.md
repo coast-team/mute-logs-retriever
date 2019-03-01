@@ -1,5 +1,7 @@
 # Mute Logs Retriever
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/coast-team/mute-logs-retriever.svg)](https://greenkeeper.io/)
+
 This tool is used to retrieve logs from a collaborative session stored in the log collector
 
 ## Installation
